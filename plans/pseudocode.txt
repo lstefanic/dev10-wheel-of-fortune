@@ -1,0 +1,23 @@
+for rounds 1 and 2:
+    word = choose_word()
+    while (round_not_over):
+        for players 1 to 3:
+            if (round_is_over):
+                break
+            space = spin_wheel()
+            if (space == "Bankrupt"):
+                player_money = 0
+            if (space is dollar amount):
+                guess_consonant()
+                if (guessed_right):
+                    reveal_letter()
+                    buy_vowels()
+                    if (wants_to_guess):
+                        guess_word()
+
+player = best_player()
+word = choose_word()
+reveal_RSTLNE()
+guess_consonants()
+guess_vowel()
+guess_word()
