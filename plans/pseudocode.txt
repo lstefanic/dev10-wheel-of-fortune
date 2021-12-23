@@ -11,6 +11,7 @@ for rounds 1 and 2:
                 guess_consonant()
                 if (guessed_right):
                     reveal_letter()
+                    add_money()
                     buy_vowels()
                     if (wants_to_guess):
                         guess_word()
