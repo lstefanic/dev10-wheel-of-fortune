@@ -2,6 +2,7 @@ import random
 import math
 
 def build_wheel():
+
     result = ["Bankrupt", "Lose a Turn"]
     for dollar_amount in range(100,950,50):
         result.append(dollar_amount)
@@ -57,6 +58,26 @@ def guess_word():
         guess = input("Guess a word: ")
     return guess.lower()
 
+def consonants_left():
+    
+    for i in range(len(secret_word)):
+        if ( secret_word[i] not in VOWELS and secret_word[i] not in guessed_letters ):
+            return True
+    return False
+
+def buy_vowels():
+
+    while ( player_money[player] >= 250 ):
+        print("You have $%u" % player_money[player])
+        action = input("Buy a vowel for $250? (y/n): ")
+        if ( action == "n" ):
+            break
+        if ( action == "y" ):
+            guess = guess_vowel()
+            guessed_letters.add(guess)
+            player_money[player] -= 250
+            display_info(secret_word)
+
 # Game setup
 WHEEL = build_wheel()
 VOWELS = ["a", "A", "e", "E", "i", "I", "o", "O", "u", "U"]
@@ -86,21 +107,9 @@ for round in range(2):
             else:
                 print("$%u" % space)
                 display_info(secret_word)
-                guess = guess_consonant()
-                guessed_letters.add(guess)
-                if ( secret_word.find(guess) != -1 ):
-                    display_info(secret_word)
-                    player_money[player] += space
-                    while ( player_money[player] >= 250 ):
-                        print("You have $%u" % player_money[player])
-                        action = input("Buy a vowel for $250? (y/n): ")
-                        if ( action == "n" ):
-                            break
-                        if ( action == "y" ):
-                            guess = guess_vowel()
-                            guessed_letters.add(guess)
-                            player_money[player] -= 250
-                            display_info(secret_word)
+                if ( not consonants_left() ):
+                    print("No consonants left")
+                    buy_vowels()
                     action = input("Guess the word? (y/n): ")
                     if ( action == "y" ):
                         guess = guess_word()
@@ -108,7 +117,20 @@ for round in range(2):
                             print("You guessed correctly")
                             round_is_over = True
                 else:
-                    print("That letter is not there!")
+                    guess = guess_consonant()
+                    guessed_letters.add(guess)
+                    if ( secret_word.find(guess) != -1 ):
+                        display_info(secret_word)
+                        player_money[player] += space
+                        buy_vowels()
+                        action = input("Guess the word? (y/n): ")
+                        if ( action == "y" ):
+                            guess = guess_word()
+                            if ( guess == secret_word ):
+                                print("You guessed correctly")
+                                round_is_over = True
+                    else:
+                        print("That letter is not there!")
 
 # Round 3
 best_player = 0
