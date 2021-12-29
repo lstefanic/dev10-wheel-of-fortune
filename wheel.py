@@ -21,9 +21,9 @@ def choose_word():
     index = math.floor(random.random() * len(words))
     return words[index]
 
-def display_info(secret_word):
+def display_word_info():
 
-    revealed = "\n    Secret word: "
+    revealed = "    Secret word: "
     for i in range(len(secret_word)):
         if ( secret_word[i] in guessed_letters ):
             revealed += secret_word[i]
@@ -35,7 +35,14 @@ def display_info(secret_word):
     guessed = "    Guessed letters: "
     for letter in sorted(guessed_letters):
         guessed += letter + " "
-    print(guessed[0:-1])
+    print(guessed[0:-1] + "\n")
+
+def display_score():
+
+    score = "    Scoreboard: "
+    for i in range(3):
+        score += "$%u | " % player_money[i]
+    print(score[0:-3] + "\n")
 
 def guess_consonant():
 
@@ -68,7 +75,6 @@ def consonants_left():
 def buy_vowels():
 
     while ( player_money[player] >= 250 ):
-        print("You have $%u" % player_money[player])
         action = input("Buy a vowel for $250? (y/n): ")
         if ( action == "n" ):
             break
@@ -76,7 +82,9 @@ def buy_vowels():
             guess = guess_vowel()
             guessed_letters.add(guess)
             player_money[player] -= 250
-            display_info(secret_word)
+            print("")
+            display_word_info()
+            display_score()
 
 # Game setup
 WHEEL = build_wheel()
@@ -87,6 +95,7 @@ guessed_letters = set()
 
 # Rounds 1 and 2
 for round in range(2):
+    print("\nPlayers 1, 2, and 3: Welcome to round %u" % (round+1))
     guessed_letters.clear()
     secret_word = choose_word()
     while (secret_word in used_words ):
@@ -97,40 +106,47 @@ for round in range(2):
         for player in range(3):
             if ( round_is_over ):
                 break
-            print("Player %u, it's your turn. Spinning wheel..." % (player+1))
+            input("\nPlayer %u, it's your turn. Hit Enter to spin the wheel" % (player+1))
             space = spin_wheel()
             if ( space == "Bankrupt" ):
-                print("Bankrupt")
+                print("\n    You landed on Bankrupt")
                 player_money[player] = 0
             elif ( space == "Lose a Turn" ):
-                print("Lose a Turn")
+                print("\n    You landed on Lose a Turn")
             else:
-                print("$%u" % space)
-                display_info(secret_word)
+                print("\n    You landed on $%u" % space)
+                display_word_info()
+                display_score()
                 if ( not consonants_left() ):
-                    print("No consonants left")
+                    print("There are no consonants left")
                     buy_vowels()
                     action = input("Guess the word? (y/n): ")
                     if ( action == "y" ):
                         guess = guess_word()
                         if ( guess == secret_word ):
-                            print("You guessed correctly")
+                            print("\n    You found the secret word!")
                             round_is_over = True
+                        else:
+                            print("\n    That guess is incorrect")
                 else:
                     guess = guess_consonant()
                     guessed_letters.add(guess)
                     if ( secret_word.find(guess) != -1 ):
-                        display_info(secret_word)
                         player_money[player] += space
+                        print("\n    You guessed correctly!")
+                        display_word_info()
+                        display_score()
                         buy_vowels()
                         action = input("Guess the word? (y/n): ")
                         if ( action == "y" ):
                             guess = guess_word()
                             if ( guess == secret_word ):
-                                print("You guessed correctly")
+                                print("\n    You found the secret word!")
                                 round_is_over = True
+                            else:
+                                print("\n    That guess is incorrect")
                     else:
-                        print("That letter is not there!")
+                        print("\n    That letter is not there!")
 
 # Round 3
 best_player = 0
@@ -139,14 +155,20 @@ for player in range(1,3):
     if player_money[player] > most_money:
         best_player = player
         most_money = player_money[best_player]
-print("Player %u, you move on to Round 3" % (best_player+1))
-guessed_letters.clear()
+print("\nPlayer %u, you move on to Round 3\n" % (best_player+1))
+guessed_letters = {"r", "s", "t", "l", "n", "e"}
 secret_word = choose_word()
 while (secret_word in used_words ):
     secret_word = choose_word()
 used_words.add(secret_word)
-reveal_RSTLNE()
+display_word_info()
 for i in range(3):
-    guess = guess_consonant()
-guess_vowel()
-guess_word()
+    guessed_letters.add(guess_consonant())
+guessed_letters.add(guess_vowel())
+print("")
+display_word_info()
+guess = guess_word()
+if ( guess == secret_word ):
+    print("\n    Correct! You win the grand prize of $10000!\n")
+else:
+    print("\n    Sorry, the word was %s\n" % secret_word)
