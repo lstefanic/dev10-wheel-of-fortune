@@ -25,6 +25,7 @@ def choose_phrase_and_category():
     category = phrase_dict[phrase]
     return [phrase.lower(), category.lower()]
 
+# Display category, phrase with guessed letters filled in, and set of guessed letters
 def display_puzzle_info(phrase,category,guessed_letters):
 
     revealed = "    %s: " % category
@@ -48,6 +49,7 @@ def display_score(player_money):
         score += "$%u | " % player_money[i]
     print(score[0:-3] + "\n")
 
+# Get a consonant inputted by a player
 def get_consonant():
 
     guess = "1"
@@ -55,6 +57,7 @@ def get_consonant():
         guess = input("Guess a consonant: ")
     return guess.lower()
 
+# Get a vowel inputted by a player
 def get_vowel():
 
     guess = "1"
@@ -62,6 +65,7 @@ def get_vowel():
         guess = input("Guess a vowel: ")
     return guess.lower()
 
+# Return True if there are still unguessed consonants, False if not
 def consonants_left(phrase,guessed_letters):
     
     for i in range(len(phrase)):
@@ -87,6 +91,8 @@ def buy_vowels(player_money,phrase,category,guessed_letters,player):
                 print("\n    That letter is not there!\n")
                 break
 
+# Allow player to attempt to solve the puzzle
+# Return True if puzzle is solved, False if not
 def guess_phrase(phrase):
 
     while ( True ):
@@ -119,6 +125,8 @@ def play_standard_round(player_money):
             elif ( space == "Lose a Turn" ):
                 print("\n    You landed on Lose a Turn")
             else:
+                # Wheel spin landed on money
+
                 print("\n    You landed on $%u" % space)
                 display_puzzle_info(phrase,category,guessed_letters)
                 display_score(player_money)
@@ -172,7 +180,7 @@ def play_game():
     print("\nPlayer %u, you move on to Round 3\n" % (best_player+1))
     play_final_round()
 
-#################### Main instructions ####################
+############################## Main instructions ##############################
 
 WHEEL = build_wheel()
 VOWELS = ("a", "A", "e", "E", "i", "I", "o", "O", "u", "U")
