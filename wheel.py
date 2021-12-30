@@ -41,7 +41,7 @@ def display_puzzle_info(phrase,category,guessed_letters):
         guessed += letter + " "
     print(guessed[0:-1] + "\n")
 
-def display_score():
+def display_score(player_money):
 
     score = "    Scoreboard: "
     for i in range(3):
@@ -69,7 +69,7 @@ def consonants_left(phrase,guessed_letters):
             return True
     return False
 
-def buy_vowels(phrase,category,guessed_letters,player):
+def buy_vowels(player_money,phrase,category,guessed_letters,player):
 
     while ( player_money[player] >= 250 ):
         action = input("Buy a vowel for $250? (y/n): ")
@@ -82,7 +82,7 @@ def buy_vowels(phrase,category,guessed_letters,player):
             if ( phrase.find(vowel) != -1 ):
                 print("\n    You guessed correctly!")
                 display_puzzle_info(phrase,category,guessed_letters)
-                display_score()
+                display_score(player_money)
             else:
                 print("\n    That letter is not there!\n")
                 break
@@ -99,7 +99,7 @@ def guess_phrase(phrase):
             print("\n    That guess is incorrect")
     return False
 
-def play_standard_round():
+def play_standard_round(player_money):
 
     [phrase, category] = choose_phrase_and_category()
     guessed_letters = set()
@@ -118,10 +118,10 @@ def play_standard_round():
             else:
                 print("\n    You landed on $%u" % space)
                 display_puzzle_info(phrase,category,guessed_letters)
-                display_score()
+                display_score(player_money)
                 if ( not consonants_left(phrase,guessed_letters) ):
                     print("There are no consonants left")
-                    buy_vowels(phrase,category,guessed_letters,player)
+                    buy_vowels(player_money,phrase,category,guessed_letters,player)
                     round_over = guess_phrase(phrase)
                 else:
                     consonant = get_consonant()
@@ -130,8 +130,8 @@ def play_standard_round():
                         player_money[player] += space
                         print("\n    You guessed correctly!")
                         display_puzzle_info(phrase,category,guessed_letters)
-                        display_score()
-                        buy_vowels(phrase,category,guessed_letters,player)
+                        display_score(player_money)
+                        buy_vowels(player_money,phrase,category,guessed_letters,player)
                         round_over = guess_phrase(phrase)
                     else:
                         print("\n    That letter is not there!")
@@ -154,9 +154,11 @@ def play_final_round():
 
 def play_game():
 
+    player_money = [0, 0, 0]
+
     for round in range(2):
         print("\nPlayers 1, 2, and 3: Welcome to round %u" % (round+1))
-        play_standard_round()
+        play_standard_round(player_money)
 
     best_player = 0
     most_money = player_money[best_player]
@@ -172,6 +174,5 @@ def play_game():
 WHEEL = build_wheel()
 VOWELS = ("a", "A", "e", "E", "i", "I", "o", "O", "u", "U")
 SPECIAL_CHARS = (" ", "!", "?", "&", "'", "-")
-player_money = [0, 0, 0]
 
 play_game()
