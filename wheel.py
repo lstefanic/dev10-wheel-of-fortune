@@ -89,15 +89,18 @@ def buy_vowels(player_money,phrase,category,guessed_letters,player):
 
 def guess_phrase(phrase):
 
-    action = input("Solve the puzzle? (y/n): ")
-    if ( action == "y" ):
-        guess = input("Enter your guess: ")
-        if ( guess.lower() == phrase ):
-            print("\n    You solved the puzzle!")
-            return True
-        else:
-            print("\n    That guess is incorrect")
-    return False
+    while ( True ):
+        action = input("Solve the puzzle? (y/n): ")
+        if ( action == "n" ):
+            return False
+        if ( action == "y" ):
+            guess = input("Enter your guess: ")
+            if ( guess.lower() == phrase ):
+                print("\n    You solved the puzzle!")
+                return True
+            else:
+                print("\n    That guess is incorrect")
+                return False
 
 def play_standard_round(player_money):
 
