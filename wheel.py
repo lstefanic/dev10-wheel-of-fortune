@@ -81,12 +81,16 @@ def buy_vowels(player):
         if ( action == "n" ):
             break
         if ( action == "y" ):
-            guess = get_vowel()
-            guessed_letters.add(guess)
+            vowel = get_vowel()
+            guessed_letters.add(vowel)
             player_money[player] -= 250
-            print("")
-            display_puzzle_info()
-            display_score()
+            if ( secret_phrase.find(vowel) != -1 ):
+                print("\n    You guessed correctly!")
+                display_puzzle_info()
+                display_score()
+            else:
+                print("\n    That letter is not there!\n")
+                break
 
 def guess_phrase():
 
