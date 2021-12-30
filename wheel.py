@@ -188,6 +188,6 @@ def play_game():
 
 WHEEL = build_wheel()
 VOWELS = ("a", "A", "e", "E", "i", "I", "o", "O", "u", "U")
-SPECIAL_CHARS = (" ", "!", "?", "&", "'", "-")
+SPECIAL_CHARS = (" ", ".", "!", "?", "&", "'", "-")
 
 play_game()
