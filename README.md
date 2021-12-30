@@ -11,13 +11,12 @@ Play a version of Wheel of Fortune. Runs entirely in a terminal with a text-base
 
 ### How to use
 
-Download these files:
+Download the files `wheel.py` and `phrases.json` and in a terminal, run `python wheel.py`
 
-- wheel.py
-- phrases.json
+### Sample gameplay
 
-In a terminal, run `python wheel.py`
+The text of a sample game can be seen in the jupyter notebook file `wheel.ipynb`
 
 ### Credits
 
-The phrases.json file is the output of web scrapper code provided by Scott Partacz
+The `phrases.json` file is the output of web scrapper code in `webscrapper.py` provided by Scott Partacz
