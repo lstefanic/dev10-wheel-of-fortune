@@ -161,7 +161,6 @@ for round in range(2):
     print("\nPlayers 1, 2, and 3: Welcome to round %u" % (round+1))
     guessed_letters.clear()
     [secret_phrase, category] = choose_phrase()
-    print(secret_phrase)
     standard_round()
 
 # Round 3
