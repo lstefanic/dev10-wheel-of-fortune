@@ -15,15 +15,18 @@ def spin_wheel():
     index = math.floor(random.random() * len(WHEEL))
     return WHEEL[index]
 
-def choose_phrase_and_category():
+def choose_phrase_and_category(used_phrases):
     f = open("phrases.json")
     phrase_dict = json.load(f)
     f.close()
     phrase_list = list(phrase_dict.keys())
-    index = math.floor(random.random() * len(phrase_list))
-    phrase = phrase_list[index]
-    category = phrase_dict[phrase]
-    return [phrase.lower(), category.lower()]
+    while ( True ):
+        index = math.floor(random.random() * len(phrase_list))
+        phrase = phrase_list[index]
+        category = phrase_dict[phrase]
+        if ( phrase.lower() not in used_phrases ):
+            used_phrases.add(phrase.lower())
+            return [phrase.lower(), category.lower()]
 
 # Display category, phrase with guessed letters filled in, and set of guessed letters
 def display_puzzle_info(phrase,category,guessed_letters):
@@ -108,9 +111,9 @@ def guess_phrase(phrase):
                 print("\n    That guess is incorrect")
                 return False
 
-def play_standard_round(player_money):
+def play_standard_round(player_money,used_phrases):
 
-    [phrase, category] = choose_phrase_and_category()
+    [phrase, category] = choose_phrase_and_category(used_phrases)
     guessed_letters = set()
     round_over = False
     while( not round_over ):
@@ -147,9 +150,9 @@ def play_standard_round(player_money):
                     else:
                         print("\n    That letter is not there!")
 
-def play_final_round():
+def play_final_round(used_phrases):
 
-    [phrase, category] = choose_phrase_and_category()
+    [phrase, category] = choose_phrase_and_category(used_phrases)
     guessed_letters = {"r", "s", "t", "l", "n", "e"}
     display_puzzle_info(phrase,category,guessed_letters)
     for i in range(3):
@@ -166,10 +169,11 @@ def play_final_round():
 def play_game():
 
     player_money = [0, 0, 0]
+    used_phrases = set()
 
     for round in range(2):
         print("\nPlayers 1, 2, and 3: Welcome to round %u" % (round+1))
-        play_standard_round(player_money)
+        play_standard_round(player_money,used_phrases)
 
     best_player = 0
     most_money = player_money[best_player]
@@ -178,7 +182,7 @@ def play_game():
             best_player = player
             most_money = player_money[best_player]
     print("\nPlayer %u, you move on to Round 3\n" % (best_player+1))
-    play_final_round()
+    play_final_round(used_phrases)
 
 ############################## Main instructions ##############################
 
